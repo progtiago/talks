@@ -1,6 +1,6 @@
 # Elasticsearch
 
-#### Verdades:
+#### 1. Verdades:
 
 * É um servidor de buscas baseado no Lucene
 * Full text search
@@ -9,7 +9,7 @@
 * Escalável
 * Bigdata
 
-#### Como instalar?
+#### 2. Como instalar?
 
 [Elasticsearch](https://drive.google.com/open?id=1oAjyOFQZGWfM7n5u9-DcZLfHjx9CpKcB)
 
@@ -28,7 +28,7 @@ tar -vzxf kibana-x.tar.gz
 porta http: 5601
 
 
-#### Salvando nosso primeiro produto:
+#### 3. Salvando nosso primeiro produto:
 
 POST /catalogo/produtos/
 
@@ -125,11 +125,11 @@ POST /catalogo/produtos/6
 }
 ```
 
-#### Visualizando todos os produtos
+#### 4. Visualizando todos os produtos
 
 GET /catalogo/produtos/_search
 
-#### Fazendo algumas buscas
+#### 5. Fazendo algumas buscas
 
 GET catalogo/produtos/_search?q=ean:E4Dj35D
 
@@ -146,11 +146,11 @@ GET catalogo/produtos/_search?q=Raquete
 GET catalogo/produtos/_search?q=raquetes
 
 
-#### Vendo o mapeamento da collection
+#### 6. Vendo o mapeamento da collection
 
 GET catalogo/produtos/_mapping
 
-#### Alguns problemas
+#### 7. Alguns problemas
 
 GET produtos/v1/_search?q=arcoiro
 
@@ -158,7 +158,7 @@ GET produtos/v1/_search?q=raquetes
 
 GET produtos/v1/_search?q=cor:amarela
 
-#### Analizers:
+#### 8. Analizers:
 
 ```javascript
 POST _analyze
@@ -184,7 +184,7 @@ POST _analyze
 }
 ```
 
-#### Mapeando um index
+#### 9. Mapeando um index
 
 PUT catalogo2/
 ```javascript
@@ -265,7 +265,7 @@ PUT catalogo2/
 }
 ```
 
-#### Cadastrando produtos
+#### 10. Cadastrando produtos
 
 POST /catalogo2/produtos/1
 ```javascript
@@ -357,7 +357,7 @@ POST /catalogo2/produtos/6
 }
 ```
 
-#### E agora?
+#### 11. E agora?
 
 GET produtos/v1/_search?q=raquetes
 
@@ -365,7 +365,7 @@ GET produtos/v1/_search?q=cor:amarela
 
 GET produtos/v1/_search?q=arcoiro
 
-#### Criando sinônimos
+#### 12. Criando sinônimos
 
 PUT /catalogo3
 ```javascript
@@ -586,7 +586,7 @@ GET catalogo3/produtos/_search?q=raquetes
 
 GET catalogo3/produtos/_search?q=cor:amarela
 
-#### DLS Query
+#### 13. DLS Query
 
 ```javascript
 GET /catalogo3/produtos/_search
