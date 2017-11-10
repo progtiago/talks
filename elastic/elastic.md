@@ -12,13 +12,19 @@
 #### Como instalar?
 
 [Elasticsearch](https://drive.google.com/open?id=1oAjyOFQZGWfM7n5u9-DcZLfHjx9CpKcB)
+
 tar -vzxf elasticsearch-x.tar.gz
+
 ./bin/elasticsearch
+
 porta http: 9200
 
 [Kibana](https://drive.google.com/open?id=1a04jDzrWHZNA_6sslsQfCtV59pkUPCGT)
+
 tar -vzxf kibana-x.tar.gz
+
 ./bin/kibana
+
 porta http: 5601
 
 
