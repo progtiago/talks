@@ -1,39 +1,34 @@
-Elasticsearch
+# Elasticsearch
 
-Verdades:
+#### Verdades:
 
-É um servidor de buscas baseado no Lucene
-Full text search
-Permite análise de dados em tempo real
-Trabalha com dados desnormalizados
-Escalável
-Bigdata
+* É um servidor de buscas baseado no Lucene
+* Full text search
+* Permite análise de dados em tempo real
+* Trabalha com dados desnormalizados
+* Escalável
+* Bigdata
 
-Como instalar?
+#### Como instalar?
 
-Elasticsearch
-
-link do elasticsearch
+[Elasticsearch](https://drive.google.com/open?id=1oAjyOFQZGWfM7n5u9-DcZLfHjx9CpKcB)
 tar -vzxf elasticsearch-x.tar.gz
 ./bin/elasticsearch
-http://localhost:9200
+porta http: 9200
 
-Kibana
-
-link do kibana
+[Kibana](https://drive.google.com/open?id=1a04jDzrWHZNA_6sslsQfCtV59pkUPCGT)
 tar -vzxf kibana-x.tar.gz
 ./bin/kibana
-http://localhost:5601
+porta http: 5601
 
 
-Salvando nosso primeiro produto:
+#### Salvando nosso primeiro produto:
 
-Produto 1
+POST /catalogo/produtos/
+POST /catalogo/produtos/1
+PUT /catalogo/produtos/1
 
-POST /produtos/v1/
-POST /produtos/v1/1
-PUT /produtos/v1/1
-
+```javascript
 {
 	"nome":"Tênis Nike",
 	"cor":"Preto+Azul",
@@ -45,17 +40,10 @@ PUT /produtos/v1/1
 		"codigo":"10"
 	}]
 }
+```
 
-
-/ produtos / v1 /
-/ index / type /
-
-index: database
-type: collection
-
-Outros produtos
-
-POST /produtos/v1/2
+POST /catalogo/produtos/2
+```javascript
 {
 	"nome":"Raquete de Tênis",
 	"cor":"Amarelo",
@@ -67,9 +55,10 @@ POST /produtos/v1/2
 		"codigo":"24"
 	}]
 }
+```
 
-
-POST /produtos/v1/3
+POST /catalogo/produtos/3
+```javascript
 {
 	"nome":"Capa de Chuva",
 	"cor":"Cinza",
@@ -81,9 +70,10 @@ POST /produtos/v1/3
 		"codigo":"12"
 	}]
 }
+```
 
-
-POST /produtos/v1/4
+POST /catalogo/produtos/4
+```javascript
 {
 	"nome":"Carregador de Celular",
 	"cor":"Rosa Pink",
@@ -95,9 +85,10 @@ POST /produtos/v1/4
 		"codigo":"12"
 	}]
 }
+```
 
-
-POST /produtos/v1/5
+POST /catalogo/produtos/5
+```javascript
 {
 	"nome":"Áudio book",
 	"cor":"Preto+Vermelho+Branco+Lilás",
@@ -109,9 +100,10 @@ POST /produtos/v1/5
 		"codigo":"24"
 	}]
 }
+```
 
-
-POST /produtos/v1/6
+POST /catalogo/produtos/6
+```javascript
 {
 	"nome":"Meia Adidas",
 	"cor":"Vermelho+Rosa+Amarelo",
@@ -123,66 +115,63 @@ POST /produtos/v1/6
 		"codigo":"12"
 	}]
 }
+```
 
-Visualizando todos os produtos
+#### Visualizando todos os produtos
 
-GET /produtos/v1/_search
+GET /catalogo/produtos/_search
 
-Fazendo algumas buscas
+#### Fazendo algumas buscas
 
-GET produtos/v1/_search?q=ean:E4Dj35D
-GET produtos/v1/_search?q=nome:Raquete
-GET produtos/v1/_search?q=marca:Adidas
-GET produtos/v1/_search?q=modelo:Para Surdos
-GET produtos/v1/_search?q=lojistas.nome:Gaucho Pinkstore
-GET produtos/v1/_search?q=Raquete
-GET produtos/v1/_search?q=raquetes
-
-
-
-O campo _all
+GET catalogo/produtos/_search?q=ean:E4Dj35D
+GET catalogo/produtos/_search?q=nome:Raquete
+GET catalogo/produtos/_search?q=marca:Adidas
+GET catalogo/produtos/_search?q=modelo:Para Surdos
+GET catalogo/produtos/_search?q=lojistas.nome:Gaucho Pinkstore
+GET catalogo/produtos/_search?q=Raquete
+GET catalogo/produtos/_search?q=raquetes
 
 
+#### Vendo o mapeamento da collection
 
+GET catalogo/produtos/_mapping
 
-
-
-
-
-Vendo o mapeamento da collection
-
-GET produtos/v1/_mapping
-
-Alguns problemas
+#### Alguns problemas
 
 GET produtos/v1/_search?q=arcoiro
 GET produtos/v1/_search?q=raquetes
 GET produtos/v1/_search?q=cor:amarela
 
-Analizers:
+#### Analizers:
 
+```javascript
 POST _analyze
 {
   "analyzer": "portuguese",
   "text":     "O Código bonito, código formoso, código bem feito"
 }
+```
 
 POST _analyze
+```javascript
 {
   "analyzer": "whitespace",
   "text":     "O Código bonito, código formoso, código bem feito"
 }
+```
 
 POST _analyze
+```javascript
 {
   "analyzer": "standard",
   "text":     "O Código bonito, código formoso, código bem feito"
 }
+```
 
-
-Mapeando um index
+#### Mapeando um index
 
 PUT catalogo2/
+```javascript
 {
   "settings" : {
         "number_of_shards" : 1
@@ -258,10 +247,12 @@ PUT catalogo2/
     }
   }
 }
+```
 
-Cadastrando produtos
+#### Cadastrando produtos
 
 POST /catalogo2/produtos/1
+```javascript
 {
 	"nome":"Tênis Nike",
 	"cor":"Preto+Azul",
@@ -273,8 +264,10 @@ POST /catalogo2/produtos/1
 		"codigo":"10"
 	}]
 }
+```
 
 POST /catalogo2/produtos/2
+```javascript
 {
 	"nome":"Raquete de Tênis",
 	"cor":"Amarelo",
@@ -286,9 +279,10 @@ POST /catalogo2/produtos/2
 		"codigo":"24"
 	}]
 }
-
+```
 
 POST /catalogo2/produtos/3
+```javascript
 {
 	"nome":"Capa de Chuva",
 	"cor":"Cinza",
@@ -300,9 +294,10 @@ POST /catalogo2/produtos/3
 		"codigo":"12"
 	}]
 }
-
+```
 
 POST /catalogo2/produtos/4
+```javascript
 {
 	"nome":"Carregador de Celular",
 	"cor":"Rosa Pink",
@@ -314,9 +309,10 @@ POST /catalogo2/produtos/4
 		"codigo":"12"
 	}]
 }
-
+```
 
 POST /catalogo2/produtos/5
+```javascript
 {
 	"nome":"Áudio book",
 	"cor":"Preto+Vermelho+Branco+Lilás",
@@ -328,9 +324,10 @@ POST /catalogo2/produtos/5
 		"codigo":"24"
 	}]
 }
-
+```
 
 POST /catalogo2/produtos/6
+```javascript
 {
 	"nome":"Meia Adidas",
 	"cor":"Vermelho+Rosa+Amarelo",
@@ -342,16 +339,18 @@ POST /catalogo2/produtos/6
 		"codigo":"12"
 	}]
 }
+```
 
-E agora?
+#### E agora?
 
 GET produtos/v1/_search?q=raquetes
 GET produtos/v1/_search?q=cor:amarela
 GET produtos/v1/_search?q=arcoiro
 
-Criando sinônimos
+#### Criando sinônimos
 
 PUT /catalogo3
+```javascript
 {
   "settings": {
     "index": {
@@ -465,14 +464,17 @@ PUT /catalogo3
     }
   }
 }
+```
 
 POST /catalogo3/_analyze
+```javascript
 {
   "analyzer": "sinonimos",
   "text": "arcoiro"
 }
-
+```
 POST /catalogo3/produtos/1
+```javascript
 {
 	"nome":"Tênis Nike",
 	"cor":"Preto+Azul",
@@ -484,8 +486,9 @@ POST /catalogo3/produtos/1
 		"codigo":"10"
 	}]
 }
-
+```
 POST /catalogo3/produtos/2
+```javascript
 {
 	"nome":"Raquete de Tênis",
 	"cor":"Amarelo",
@@ -497,9 +500,10 @@ POST /catalogo3/produtos/2
 		"codigo":"24"
 	}]
 }
-
+```
 
 POST /catalogo3/produtos/3
+```javascript
 {
 	"nome":"Capa de Chuva",
 	"cor":"Cinza",
@@ -511,9 +515,10 @@ POST /catalogo3/produtos/3
 		"codigo":"12"
 	}]
 }
-
+```
 
 POST /catalogo3/produtos/4
+```javascript
 {
 	"nome":"Carregador de Celular",
 	"cor":"Rosa Pink",
@@ -525,9 +530,10 @@ POST /catalogo3/produtos/4
 		"codigo":"12"
 	}]
 }
-
+```
 
 POST /catalogo3/produtos/5
+```javascript
 {
 	"nome":"Áudio book",
 	"cor":"Preto+Vermelho+Branco+Lilás",
@@ -539,9 +545,10 @@ POST /catalogo3/produtos/5
 		"codigo":"24"
 	}]
 }
-
+```
 
 POST /catalogo3/produtos/6
+```javascript
 {
 	"nome":"Meia Adidas",
 	"cor":"Vermelho+Rosa+Amarelo",
@@ -553,13 +560,15 @@ POST /catalogo3/produtos/6
 		"codigo":"12"
 	}]
 }
+```
 
 GET catalogo3/produtos/_search?q=arcoiro
 GET catalogo3/produtos/_search?q=raquetes
 GET catalogo3/produtos/_search?q=cor:amarela
 
-DLS Query
+#### DLS Query
 
+```javascript
 GET /catalogo3/produtos/_search
 {
   "query": {
@@ -596,7 +605,7 @@ GET /catalogo3/produtos/_search
     }
   }
 }
-
+```
 
 
 
