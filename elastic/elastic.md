@@ -146,6 +146,10 @@ GET catalogo/produtos/_search?q=Raquete
 GET catalogo/produtos/_search?q=raquetes
 
 
+![](![](https://github.com/progtiago/talks/blob/master/elastic/indice.jpg))
+
+
+
 #### 6. Vendo o mapeamento da collection
 
 GET catalogo/produtos/_mapping
