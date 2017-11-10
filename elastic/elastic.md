@@ -31,7 +31,9 @@ porta http: 5601
 #### Salvando nosso primeiro produto:
 
 POST /catalogo/produtos/
+
 POST /catalogo/produtos/1
+
 PUT /catalogo/produtos/1
 
 ```javascript
@@ -130,11 +132,17 @@ GET /catalogo/produtos/_search
 #### Fazendo algumas buscas
 
 GET catalogo/produtos/_search?q=ean:E4Dj35D
+
 GET catalogo/produtos/_search?q=nome:Raquete
+
 GET catalogo/produtos/_search?q=marca:Adidas
+
 GET catalogo/produtos/_search?q=modelo:Para Surdos
+
 GET catalogo/produtos/_search?q=lojistas.nome:Gaucho Pinkstore
+
 GET catalogo/produtos/_search?q=Raquete
+
 GET catalogo/produtos/_search?q=raquetes
 
 
@@ -145,7 +153,9 @@ GET catalogo/produtos/_mapping
 #### Alguns problemas
 
 GET produtos/v1/_search?q=arcoiro
+
 GET produtos/v1/_search?q=raquetes
+
 GET produtos/v1/_search?q=cor:amarela
 
 #### Analizers:
@@ -350,7 +360,9 @@ POST /catalogo2/produtos/6
 #### E agora?
 
 GET produtos/v1/_search?q=raquetes
+
 GET produtos/v1/_search?q=cor:amarela
+
 GET produtos/v1/_search?q=arcoiro
 
 #### Criando sinônimos
@@ -569,7 +581,9 @@ POST /catalogo3/produtos/6
 ```
 
 GET catalogo3/produtos/_search?q=arcoiro
+
 GET catalogo3/produtos/_search?q=raquetes
+
 GET catalogo3/produtos/_search?q=cor:amarela
 
 #### DLS Query
