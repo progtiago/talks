@@ -11,7 +11,7 @@
 
 #### 2. Como instalar?
 
-[Elasticsearch](https://drive.google.com/open?id=1oAjyOFQZGWfM7n5u9-DcZLfHjx9CpKcB)
+[Elasticsearch](https://drive.google.com/open?id=1nCe6mDYdjYeCzzNr8kv4Fr68_UaZp2Xv)
 
 tar -vzxf elasticsearch-x.tar.gz
 
@@ -19,7 +19,7 @@ tar -vzxf elasticsearch-x.tar.gz
 
 porta http: 9200
 
-[Kibana](https://drive.google.com/open?id=1a04jDzrWHZNA_6sslsQfCtV59pkUPCGT)
+[Kibana](https://drive.google.com/open?id=1Lc9xEuHHuLuoSNnrEZReboSTh_gsZwyX)
 
 tar -vzxf kibana-x.tar.gz
 
@@ -30,12 +30,25 @@ porta http: 5601
 
 #### 3. Salvando nosso primeiro produto:
 
-POST /catalogo/produtos/
+##### Criando um índice
+PUT /produto
 
-POST /catalogo/produtos/1
+POST /produto/default/1
+```javascript
+{
+	"nome":"Tênis Nikessss",
+	"cor":"Preto+Azul",
+	"marca":"Nike",
+	"modelo":"modelo do caipira",
+	"ean":"D4D435D",
+	"lojistas":[{
+		"nome":"Macau BigStore",
+		"codigo":"10"
+	}]
+}
+```
 
-PUT /catalogo/produtos/1
-
+PUT /produto/default/1
 ```javascript
 {
 	"nome":"Tênis Nike",
@@ -50,7 +63,7 @@ PUT /catalogo/produtos/1
 }
 ```
 
-POST /catalogo/produtos/2
+POST /produto/default/2
 ```javascript
 {
 	"nome":"Raquete de Tênis",
@@ -65,7 +78,7 @@ POST /catalogo/produtos/2
 }
 ```
 
-POST /catalogo/produtos/3
+POST /produto/default/3
 ```javascript
 {
 	"nome":"Capa de Chuva",
@@ -80,7 +93,7 @@ POST /catalogo/produtos/3
 }
 ```
 
-POST /catalogo/produtos/4
+POST /produto/default/4
 ```javascript
 {
 	"nome":"Carregador de Celular",
@@ -95,7 +108,7 @@ POST /catalogo/produtos/4
 }
 ```
 
-POST /catalogo/produtos/5
+POST /produto/default/5
 ```javascript
 {
 	"nome":"Áudio book",
@@ -110,7 +123,7 @@ POST /catalogo/produtos/5
 }
 ```
 
-POST /catalogo/produtos/6
+POST /produto/default/6
 ```javascript
 {
 	"nome":"Meia Adidas",
@@ -127,48 +140,46 @@ POST /catalogo/produtos/6
 
 #### 4. Visualizando todos os produtos
 
-GET /catalogo/produtos/_search
+GET /produto/default/_search
 
 #### 5. Fazendo algumas buscas
 
-GET catalogo/produtos/_search?q=ean:E4Dj35D
+GET produto/default/_search?q=ean:E4Dj35D
 
-GET catalogo/produtos/_search?q=nome:Raquete
+GET produto/default/_search?q=nome:Raquete
 
-GET catalogo/produtos/_search?q=marca:Adidas
+GET produto/default/_search?q=marca:Adidas
 
-GET catalogo/produtos/_search?q=modelo:Para Surdos
+GET produto/default/_search?q=modelo:Para Surdos
 
-GET catalogo/produtos/_search?q=lojistas.nome:Gaucho Pinkstore
+GET produto/default/_search?q=lojistas.nome:Gaucho Pinkstore
 
-GET catalogo/produtos/_search?q=Raquete
+GET produto/default/_search?q=Raquete
 
-GET catalogo/produtos/_search?q=raquetes
-
+GET produto/default/_search?q=raquetes
 
 ![](https://github.com/progtiago/talks/blob/master/elastic/indice.jpg)
 
-
-
 #### 6. Vendo o mapeamento da collection
 
-GET catalogo/produtos/_mapping
+GET produto/default/_mapping
 
 #### 7. Alguns problemas
 
-GET produtos/v1/_search?q=arcoiro
+GET produto/default/_search?q=arcoiro
 
-GET produtos/v1/_search?q=raquetes
+GET produto/default/_search?q=raquetes
 
-GET produtos/v1/_search?q=cor:amarela
+GET produto/default/_search?q=cor:amarela
 
-#### 8. Analizers:
+#### 8. Analizers
 
-```javascript
+
 POST _analyze
+```javascript
 {
   "analyzer": "portuguese",
-  "text":     "O Código bonito, código formoso, código bem feito"
+  "text":     "O Código bonito, código formoso, código bem feito!"
 }
 ```
 
@@ -176,7 +187,7 @@ POST _analyze
 ```javascript
 {
   "analyzer": "whitespace",
-  "text":     "O Código bonito, código formoso, código bem feito"
+  "text":     "O Código bonito, código formoso, código bem feito!"
 }
 ```
 
@@ -184,20 +195,66 @@ POST _analyze
 ```javascript
 {
   "analyzer": "standard",
-  "text":     "O Código bonito, código formoso, código bem feito"
+  "text":     "O Código bonito, código formoso, código bem feito!"
+}
+```
+
+##### Estrutura dos analyzers
+
+![](https://github.com/progtiago/talks/blob/master/elastic/analyzers.png)
+
+[Character Filters](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-charfilters.html)
+
+[Tokenizers](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-tokenizers.html)
+
+[Token Filters](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-tokenfilters.html)
+
+##### Customizando analyzers
+
+POST _analyze
+```javascript
+{
+  "analyzer": "standard",
+  "text":     "<html><h1>Código bonito, código formoso, código bem feito!</h1></html>"
+}
+```
+PUT testando_meu_proprio_analyzer
+```javascript
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_custom_analyzer": {
+          "type": "custom", 
+          "tokenizer": "standard",
+          "char_filter": [
+            "html_strip"
+          ],
+          "filter": [
+            "uppercase"
+          ]
+        }
+      }
+    }
+  }
+}
+```
+
+POST testando_meu_proprio_analyzer/_analyze
+```javascript
+{
+  "analyzer": "my_custom_analyzer",
+  "text":     "<html><h1>Código bonito, código formoso, código bem feito!</h1></html>"
 }
 ```
 
 #### 9. Mapeando um index
 
-PUT catalogo2/
+PUT /produto
 ```javascript
 {
-  "settings" : {
-        "number_of_shards" : 1
-    },
   "mappings": {
-    "produtos": {
+    "default": {
       "_all": {
         "type": "text",
         "analyzer": "portuguese"
@@ -213,8 +270,7 @@ PUT catalogo2/
             }
           },
           "type": "text",
-          "analyzer": "portuguese",
-          "search_analyzer": "portuguese"
+          "analyzer": "portuguese"
         },
         "cor": {
           "fields": {
@@ -224,7 +280,7 @@ PUT catalogo2/
           },
           "type": "text",
           "analyzer": "portuguese",
-          "search_analyzer": "portuguese"
+          "search_analyzer": "standard"
         },
         "marca": {
           "fields": {
@@ -233,8 +289,7 @@ PUT catalogo2/
             }
           },
           "type": "text",
-          "analyzer": "portuguese",
-          "search_analyzer": "portuguese"
+          "analyzer": "portuguese"
         },
         "modelo": {
           "fields": {
@@ -243,8 +298,7 @@ PUT catalogo2/
             }
           },
           "type": "text",
-          "analyzer": "portuguese",
-          "search_analyzer": "portuguese"
+          "analyzer": "portuguese"
         },
         "lojistas": {
           "properties": {
@@ -258,8 +312,7 @@ PUT catalogo2/
                 }
               },
             "type": "text",
-            "analyzer": "portuguese",
-            "search_analyzer": "portuguese"
+            "analyzer": "portuguese"
             }
           }
         }
@@ -269,9 +322,10 @@ PUT catalogo2/
 }
 ```
 
+
 #### 10. Cadastrando produtos
 
-POST /catalogo2/produtos/1
+POST /produto/default/1
 ```javascript
 {
 	"nome":"Tênis Nike",
@@ -286,7 +340,7 @@ POST /catalogo2/produtos/1
 }
 ```
 
-POST /catalogo2/produtos/2
+POST /produto/default/2
 ```javascript
 {
 	"nome":"Raquete de Tênis",
@@ -301,7 +355,7 @@ POST /catalogo2/produtos/2
 }
 ```
 
-POST /catalogo2/produtos/3
+POST /produto/default/3
 ```javascript
 {
 	"nome":"Capa de Chuva",
@@ -316,7 +370,7 @@ POST /catalogo2/produtos/3
 }
 ```
 
-POST /catalogo2/produtos/4
+POST /produto/default/4
 ```javascript
 {
 	"nome":"Carregador de Celular",
@@ -331,7 +385,7 @@ POST /catalogo2/produtos/4
 }
 ```
 
-POST /catalogo2/produtos/5
+POST /produto/default/5
 ```javascript
 {
 	"nome":"Áudio book",
@@ -346,7 +400,7 @@ POST /catalogo2/produtos/5
 }
 ```
 
-POST /catalogo2/produtos/6
+POST /produto/default/6
 ```javascript
 {
 	"nome":"Meia Adidas",
@@ -363,51 +417,36 @@ POST /catalogo2/produtos/6
 
 #### 11. E agora?
 
-GET produtos/v1/_search?q=raquetes
+GET produto/default/_search?q=raquetes
 
-GET produtos/v1/_search?q=cor:amarela
+GET produto/default/_search?q=cor:amarela
 
-GET produtos/v1/_search?q=arcoiro
+GET produto/default/_search?q=arcoiro
 
 #### 12. Criando sinônimos
 
-PUT /catalogo3
+PUT /produto
 ```javascript
+PUT /produto
 {
   "settings": {
-    "index": {
-      "number_of_shards": 1,
-      "number_of_replicas": 0
-    },
     "analysis": {
       "filter": {
-        "portuguese_stop": {
-          "type":       "stop",
-          "stopwords":  "_portuguese_" 
-        },
-        "portuguese_keywords": {
-          "type":       "keyword_marker",
-          "keywords":   ["exemplo"] 
-        },
         "portuguese_stemmer": {
           "type":       "stemmer",
           "language":   "light_portuguese"
         },
         "filtro_de_sinonimos": {
             "type": "synonym",
-            "synonyms": [
-                "raquete,arcoiro"
-            ]
+            "synonyms": ["raquete,arcoiro"]
         }
       },
       "analyzer": {
         "sinonimos": {
           "tokenizer":  "standard",
           "filter": [
-            "filtro_de_sinonimos",
             "lowercase",
-            "portuguese_stop",
-            "portuguese_keywords",
+            "filtro_de_sinonimos",
             "portuguese_stemmer"
           ]
         }
@@ -415,12 +454,7 @@ PUT /catalogo3
     }
   },
   "mappings": {
-    "produtos": {
-      "_all": {
-        "type": "text",
-        "analyzer": "sinonimos",
-        "search_analyzer": "sinonimos"
-      },
+    "default": {
       "properties": {
         "ean": {
           "type": "text"
@@ -432,8 +466,7 @@ PUT /catalogo3
             }
           },
           "type": "text",
-          "analyzer": "portuguese",
-          "search_analyzer": "portuguese"
+          "analyzer": "sinonimos"
         },
         "cor": {
           "fields": {
@@ -442,8 +475,7 @@ PUT /catalogo3
             }
           },
           "type": "text",
-          "analyzer": "portuguese",
-          "search_analyzer": "portuguese"
+          "analyzer": "portuguese"
         },
         "marca": {
           "fields": {
@@ -452,8 +484,7 @@ PUT /catalogo3
             }
           },
           "type": "text",
-          "analyzer": "portuguese",
-          "search_analyzer": "portuguese"
+          "analyzer": "portuguese"
         },
         "modelo": {
           "fields": {
@@ -462,8 +493,7 @@ PUT /catalogo3
             }
           },
           "type": "text",
-          "analyzer": "portuguese",
-          "search_analyzer": "portuguese"
+          "analyzer": "portuguese"
         },
         "lojistas": {
           "properties": {
@@ -477,8 +507,7 @@ PUT /catalogo3
                 }
               },
             "type": "text",
-            "analyzer": "portuguese",
-            "search_analyzer": "portuguese"
+            "analyzer": "portuguese"
             }
           }
         }
@@ -488,14 +517,14 @@ PUT /catalogo3
 }
 ```
 
-POST /catalogo3/_analyze
+GET /produto/_analyze
 ```javascript
 {
   "analyzer": "sinonimos",
   "text": "arcoiro"
 }
 ```
-POST /catalogo3/produtos/1
+POST /produto/default/1
 ```javascript
 {
 	"nome":"Tênis Nike",
@@ -509,7 +538,8 @@ POST /catalogo3/produtos/1
 	}]
 }
 ```
-POST /catalogo3/produtos/2
+
+POST /produto/default/2
 ```javascript
 {
 	"nome":"Raquete de Tênis",
@@ -524,7 +554,7 @@ POST /catalogo3/produtos/2
 }
 ```
 
-POST /catalogo3/produtos/3
+POST /produto/default/3
 ```javascript
 {
 	"nome":"Capa de Chuva",
@@ -539,7 +569,7 @@ POST /catalogo3/produtos/3
 }
 ```
 
-POST /catalogo3/produtos/4
+POST /produto/default/4
 ```javascript
 {
 	"nome":"Carregador de Celular",
@@ -554,7 +584,7 @@ POST /catalogo3/produtos/4
 }
 ```
 
-POST /catalogo3/produtos/5
+POST /produto/default/5
 ```javascript
 {
 	"nome":"Áudio book",
@@ -569,7 +599,7 @@ POST /catalogo3/produtos/5
 }
 ```
 
-POST /catalogo3/produtos/6
+POST /produto/default/6
 ```javascript
 {
 	"nome":"Meia Adidas",
@@ -584,52 +614,12 @@ POST /catalogo3/produtos/6
 }
 ```
 
-GET catalogo3/produtos/_search?q=arcoiro
+GET produto/default/_search?q=raquetes
 
-GET catalogo3/produtos/_search?q=raquetes
+GET produto/default/_search?q=cor:amarela
 
-GET catalogo3/produtos/_search?q=cor:amarela
+GET produto/default/_search?q=arcoiro
 
-#### 13. DLS Query
-
-```javascript
-GET /catalogo3/produtos/_search
-{
-  "query": {
-    "function_score": {
-      "min_score": 2,
-      "score_mode": "sum",
-      "query": {},
-      "functions": [
-        {
-          "filter": {
-            "match": {
-              "ean": "D4D4350"
-            }
-          },
-          "weight": 1
-        },
-        {
-          "filter": {
-            "match": {
-              "marca": "mormaii"
-            }
-          },
-          "weight": 3
-        },
-        {
-          "filter": {
-            "match": {
-              "cor": "amarela"
-            }
-          },
-          "weight": 7
-        }
-      ]
-    }
-  }
-}
-```
 
 
 
