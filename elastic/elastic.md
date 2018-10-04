@@ -633,6 +633,44 @@ GET /produto/default/_search
 }
 ```
 
+GET /produto/default/_search
+```javascript
+{
+  "query": {
+    "function_score": {
+      "min_score": 2,
+      "score_mode": "sum",
+      "functions": [
+        {
+          "filter": {
+            "match": {
+              "ean": "D4D4350"
+            }
+          },
+          "weight": 1
+        },
+        {
+          "filter": {
+            "match": {
+              "marca": "mormaii"
+            }
+          },
+          "weight": 3
+        },
+        {
+          "filter": {
+            "match": {
+              "cor": "amarela"
+            }
+          },
+          "weight": 7
+        }
+      ]
+    }
+  }
+}
+```
+
 #### 14. Bulk API
 
 curl -H "Content-Type: application/json" -XPOST "http://localhost:9200/product/default/_bulk?pretty" --data-binary "@test-data.json"
