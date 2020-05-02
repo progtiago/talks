@@ -5,7 +5,7 @@
 * É um servidor de buscas baseado no Lucene
 * Full text search
 * Permite análise de dados em tempo real
-* Trabalha com dados desnormalizados
+* Trabalha com dados desnormalizados.
 * Escalável
 * Bigdata
 
